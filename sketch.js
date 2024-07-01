@@ -1,25 +1,24 @@
 let img;
 let img_large;
+let deflt;
 let centroids = [];
 let centroidAssignment = [];
 let k = 5;
-let maxIters = 2;
+let maxIters = 50;
 let canvasHeight;
-let canvasContainer;
+let canvasWidth;
 
-function preload(){
-  //img = loadImage('assets/lotus.jpg');
-  //img_large = loadImage('assets/lotus.jpg');
+function preload() {
+  deflt = loadImage('assets/mount.png');
 }
 
 function setup() {
   canvasContainer = select('.canvas');
-  canvasHeight = (select('.grid_item')).height;
-  console.log(canvasContainer.width);
-  console.log(canvasHeight);
-  let canv = createCanvas(canvasContainer.width - 50, canvasHeight - 100);
+  canvasHeight = (select('.grid_item')).height - 75;
+  let canv = createCanvas(canvasContainer.width - 75, canvasHeight);
   canv.parent(canvasContainer);
   background(255);
+  image(deflt, 0,0);
   
   let input = createFileInput(handleImage);
   input.parent(canvasContainer);
@@ -27,49 +26,25 @@ function setup() {
 
 function draw() {
   if(img){
-    console.log("in conditional");
-    
+    background(255);
     img.resize(300,300);
     if(img_large.width > img_large.height){
-      img_large.resize(0,canvasContainer.width);
+      img_large.resize(0,width);
     }
-    else img_large.resize(canvasContainer.width,0);
+    else img_large.resize(width,0);
 
-    //image(img,0,0,600,800,0,0,img.width, img.height, COVER);
     img.loadPixels();
     console.log(img.pixels.length);
-    console.log(img.width);
 
-    //initializing centroids 
-    let spacing = int(img.width * img.height/7);
-    for(let i = 1; i<= k; i++){
-      let index = int(spacing*k);
-      centroids.push(getPixel(index));
-      console.log("Initialized " + centroids[i]);
-    }
-
-    //centroidAssignment[i] holds an int representing the index 1-k of the 
-    //centroid that pixel is  assigned to 
-    for (let i = 0; i < img.width * img.height; i++) {
-      centroidAssignment.push(0);
-    }
-
+    initializeCentroids();
     kMeans();
   
-    let xStart = Math.max(0, int((img_large.width - canvasContainer.width)/2));
-    let yStart = Math.max(0, int((img_large.height - canvasHeight)/2));
-    let img_new = img_large.get(xStart,yStart,canvasContainer.width,canvasHeight);
+    let xStart = Math.max(0, int((img_large.width - height)/2));
+    let yStart = Math.max(0, int((img_large.height - height)/2));
+    let img_new = img_large.get(xStart, yStart, height, height);
     image(img_new,0,0);
 
-    let squareHeight = int(canvasHeight/6);
-    let margin = int(squareHeight/7);
-    for(let i = 0; i<k; i++){
-      stroke(255);
-      strokeWeight(5);
-      fill(centroids[i]);
-      square((width - canvasHeight)/2, margin + squareHeight*i, squareHeight);
-      margin += int(squareHeight/7);
-    }
+    drawSquares();
     noLoop();
   }
 }
@@ -83,6 +58,22 @@ function kMeans(){
     iters++;
   }
   console.log("iterations: "+iters);
+}
+
+function initializeCentroids(){
+  //initializing centroids 
+  let spacing = int(img.width * img.height/7);
+  for(let i = 1; i<= k; i++){
+    let index = int(spacing*k);
+    centroids.push(getPixel(index));
+    console.log("Initialized " + centroids[i]);
+  }
+
+  //centroidAssignment[i] holds an int representing the index 1-k of the 
+  //centroid that pixel is  assigned to 
+  for (let i = 0; i < img.width * img.height; i++) {
+    centroidAssignment.push(0);
+  }
 }
 
 function assignToCentroid(){
@@ -142,21 +133,8 @@ function getPixel(index) {
   return color(img.pixels[index], img.pixels[index+1], img.pixels[index+2]);
 }
 
-// function handleImage(file) {
-//   console.log("calling function");
-//   if (file.type === 'image') {
-//     img = loadImage(file.data, function(loadedImage) {
-//       img = loadedImage;
-//       img_large = loadedImage.get(); // Clone the image for img_large
-//     });
-//   } else {
-//     img = null;
-//   }
-//   console.log(img === null);
-// }
-
 function handleImage(file) {
-  console.log("calling function");
+  console.log("handleImage called");
   if (file.type === 'image') {
     loadImage(file.data, function(loadedImage) {
       img = loadedImage;
@@ -172,5 +150,17 @@ function handleImage(file) {
     img = null;
     img_large = null;
   }
-  console.log(img === null);
+}
+
+function drawSquares() {
+  let squareHeight = int(height/6);
+    let margin = (height - (5*squareHeight))/6;
+    let curMarg = margin;
+    for(let i = 0; i<k; i++){
+      stroke(255);
+      strokeWeight(5);
+      fill(centroids[i]);
+      square(height + (width - height - squareHeight)/2, curMarg + squareHeight*i, squareHeight);
+      curMarg += margin;
+    }
 }
