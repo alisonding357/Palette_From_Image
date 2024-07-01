@@ -14,7 +14,7 @@ function preload() {
 
 function setup() {
   canvasContainer = select('.canvas');
-  canvasHeight = (select('.grid_item')).height - 75;
+  canvasHeight = (select('.grid_item')).height - 150;
   let canv = createCanvas(canvasContainer.width - 75, canvasHeight);
   canv.parent(canvasContainer);
   background(255);

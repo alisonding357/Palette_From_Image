@@ -17,6 +17,7 @@
   font-weight: 400;
   padding: 1rem;
   color: var(--text-dark);
+  font-size: 18px;
 }
 
 body {
@@ -47,6 +48,7 @@ canvas {
   margin: auto;
   display: grid;
   grid-template-columns: 400px 1200px;
+  grid-template-rows: 1000px 100px;
   gap: 2rem;
 }
 
