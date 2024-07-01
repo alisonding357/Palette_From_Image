@@ -3,7 +3,9 @@ let img_large;
 let centroids = [];
 let centroidAssignment = [];
 let k = 5;
-let maxIters = 80;
+let maxIters = 2;
+let canvasHeight;
+let canvasContainer;
 
 function preload(){
   //img = loadImage('assets/lotus.jpg');
@@ -11,8 +13,11 @@ function preload(){
 }
 
 function setup() {
-  let canvasContainer = select('.canvas');
-  let canv = createCanvas(canvasContainer.width - 50, 800);
+  canvasContainer = select('.canvas');
+  canvasHeight = (select('.grid_item')).height;
+  console.log(canvasContainer.width);
+  console.log(canvasHeight);
+  let canv = createCanvas(canvasContainer.width - 50, canvasHeight - 100);
   canv.parent(canvasContainer);
   background(255);
   
@@ -26,9 +31,9 @@ function draw() {
     
     img.resize(300,300);
     if(img_large.width > img_large.height){
-      img_large.resize(0,800);
+      img_large.resize(0,canvasContainer.width);
     }
-    else img_large.resize(800,0);
+    else img_large.resize(canvasContainer.width,0);
 
     //image(img,0,0,600,800,0,0,img.width, img.height, COVER);
     img.loadPixels();
@@ -51,14 +56,19 @@ function draw() {
 
     kMeans();
   
-    img_large = img_large.get(0,0,800,800);
-    image(img_large,0,0);
+    let xStart = Math.max(0, int((img_large.width - canvasContainer.width)/2));
+    let yStart = Math.max(0, int((img_large.height - canvasHeight)/2));
+    let img_new = img_large.get(xStart,yStart,canvasContainer.width,canvasHeight);
+    image(img_new,0,0);
 
+    let squareHeight = int(canvasHeight/6);
+    let margin = int(squareHeight/7);
     for(let i = 0; i<k; i++){
       stroke(255);
       strokeWeight(5);
       fill(centroids[i]);
-      square(850, 35 + 150*i, 130);
+      square((width - canvasHeight)/2, margin + squareHeight*i, squareHeight);
+      margin += int(squareHeight/7);
     }
     noLoop();
   }
