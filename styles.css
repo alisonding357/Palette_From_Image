@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@100..900&display=swap');
+
+:root {
+  --primary-color: #ceadff;
+  --primary-color-dark: #9333ea;
+  --primary-color-light: #e2dcff;
+  --secondary-color: #ca8a04;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --extra-light: #faf5ff;
+  --max-width: 100%;
+}
+
+* {
+  margin: 0;
+  font-family: "M PLUS 2", sans-serif;
+  font-weight: 300;
+  padding: 1rem;
+}
+
+body {
+  margin: 5%;
+  font-weight: 100;
+  background-color: var(--primary-color-light);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 5cap;
+}
+
+h2 {
+  font-weight: 500;
+  font-size: 2cap;
+  padding-bottom: 0rem;
+  padding-top: 2rem;
+}
+
+canvas {
+  display: block;
+}
+
+.grid__container {
+  min-height: 100vh;
+  max-width: var(--max-width);
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.grid_item {
+  background-color: var(--primary-color);
+}
