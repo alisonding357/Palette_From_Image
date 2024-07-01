@@ -12,7 +12,7 @@ function preload(){
 
 function setup() {
   let canvasContainer = select('.canvas');
-  let canv = createCanvas(1000, 800);
+  let canv = createCanvas(canvasContainer.width - 50, 800);
   canv.parent(canvasContainer);
   background(255);
   
@@ -23,8 +23,6 @@ function setup() {
 function draw() {
   if(img){
     console.log("in conditional");
-    //image(img,0,0);
-    image(img_large,0,0);
     
     img.resize(300,300);
     if(img_large.width > img_large.height){
@@ -53,13 +51,14 @@ function draw() {
 
     kMeans();
   
+    img_large = img_large.get(0,0,800,800);
     image(img_large,0,0);
 
     for(let i = 0; i<k; i++){
       stroke(255);
       strokeWeight(5);
       fill(centroids[i]);
-      square(img_large.width + (width - img_large.width)/2, 35 + 150*i, 130);
+      square(850, 35 + 150*i, 130);
     }
     noLoop();
   }
